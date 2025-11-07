@@ -25,7 +25,8 @@ const ProductoSchema = new Schema ({
         required: true
     },
     provedor:{
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Proveedor',
         required: true
     },
     precioCompra:{

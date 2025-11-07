@@ -1,4 +1,5 @@
 const Producto = require('../model/producto.model');
+const Proveedor = require('../model/provedor.model');
 
 const guardarProducto = async(req, res) =>{
     try {
@@ -8,6 +9,13 @@ const guardarProducto = async(req, res) =>{
         status: "error",
         message: "Todos los campos (nombre, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra) son obligatorios."
         });
+    }
+    const proveedorExiste = await Proveedor.findById(proveedor);
+    if (!proveedorExiste) {
+        return res.status(404).json({
+        status: "error",
+        message: "El proveedor indicado no existe."
+    });
     }
     //fecha de caducidad sea posterior a la de compra
     if (new Date(fechaCaducidad) <= new Date(fechaCompra)) {
