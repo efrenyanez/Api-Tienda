@@ -1,4 +1,4 @@
-const Proveedor = require('../model/proveedor.model');
+const Proveedor = require('../model/provedor.model');
 
 const guardarProveedor = async (req, res) => {
     try {
