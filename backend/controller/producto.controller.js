@@ -12,27 +12,30 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 // ======================================================
 const guardarProducto = async (req, res) => {
   try {
-    const { nombre, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra, imagen } = req.body;
+    const { nombre, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra } = req.body;
 
-    // Validación campos
     if (!nombre || !precio || !stock || !fechaCaducidad || !fechaCompra || !provedor || !precioCompra) {
       return res.status(400).json({ status: "error", message: "Todos los campos son obligatorios." });
     }
 
-    // Validar proveedor
     const proveedorExiste = await Proveedor.findById(provedor);
-    if (!proveedorExiste) return res.status(404).json({ status: "error", message: "Proveedor no existe." });
+    if (!proveedorExiste)
+      return res.status(404).json({ status: "error", message: "Proveedor no existe." });
 
-    // Validar fechas
     if (new Date(fechaCaducidad) <= new Date(fechaCompra)) {
       return res.status(400).json({ status: "error", message: "Fecha caducidad debe ser posterior a compra." });
     }
 
-    // Validar nombre duplicado
     const productoExistente = await Producto.findOne({ nombre: nombre.trim() });
-    if (productoExistente) return res.status(409).json({ status: "error", message: `Producto "${nombre}" ya existe.` });
+    if (productoExistente)
+      return res.status(409).json({ status: "error", message: `Producto "${nombre}" ya existe.` });
 
-    // Crear producto con imagen ya subida
+    // 🖼️ Manejar imagen si viene en req.file
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+    }
+
     const nuevoProducto = new Producto({
       nombre,
       precio,
@@ -41,15 +44,24 @@ const guardarProducto = async (req, res) => {
       fechaCompra,
       provedor,
       precioCompra,
-      imagen: imagen || "" // ya viene como URL desde frontend
+      imagen: imageUrl
     });
 
     const productoGuardado = await nuevoProducto.save();
 
-    return res.status(201).json({ status: "success", message: "Producto guardado correctamente", data: productoGuardado });
+    return res.status(201).json({
+      status: "success",
+      message: "Producto guardado correctamente",
+      data: productoGuardado
+    });
+
   } catch (error) {
     console.error("Error al guardar el producto:", error);
-    return res.status(500).json({ status: "error", message: "Error en el servidor al guardar el producto", error: error.message });
+    return res.status(500).json({
+      status: "error",
+      message: "Error en el servidor al guardar el producto",
+      error: error.message
+    });
   }
 };
 

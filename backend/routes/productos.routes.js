@@ -1,17 +1,25 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const ProductoController = require('../controller/producto.controller');
 
 const router = express.Router();
 
-// 📦 Configuración de multer
+// 📁 Crear carpeta "uploads" si no existe
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// ⚙️ Configuración de multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
+    cb(null, uploadDir); // Guarda en /uploads
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
   },
 });
 
