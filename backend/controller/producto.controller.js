@@ -2,14 +2,10 @@ const Producto = require('../model/producto.model');
 const Proveedor = require('../model/provedor.model');
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose');
 
-// ✅ Asegurar carpeta para guardar imágenes
-const uploadDir = path.join(__dirname, '../src/uploads/productos');
+const uploadDir = path.join(__dirname, '../uploads/products');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
-// ======================================================
-// GUARDAR PRODUCTO
-// ======================================================
 const guardarProducto = async (req, res) => {
   try {
     const { nombre, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra } = req.body;
@@ -30,10 +26,9 @@ const guardarProducto = async (req, res) => {
     if (productoExistente)
       return res.status(409).json({ status: "error", message: `Producto "${nombre}" ya existe.` });
 
-    // 🖼️ Manejar imagen si viene en req.file
     let imageUrl = "";
     if (req.file) {
-      imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+      imageUrl = `http://localhost:3000/uploads/products/${req.file.filename}`;
     }
 
     const nuevoProducto = new Producto({
@@ -65,9 +60,6 @@ const guardarProducto = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER TODOS
-// ======================================================
 const obtenerTodos = async (req, res) => {
   try {
     const productos = await Producto.find().populate('provedor');
@@ -85,9 +77,6 @@ const obtenerTodos = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER POR ID
-// ======================================================
 const obtenerPorId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -114,23 +103,22 @@ const obtenerPorId = async (req, res) => {
   }
 };
 
-// ======================================================
-// ACTUALIZAR POR ID
-// ======================================================
 const actualizarPorId = async (req, res) => {
   try {
     const { id } = req.params;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        status: "error",
+        message: "ID inválido."
+      });
+    }
+    
     const camposActualizados = req.body;
 
-    // Si se sube nueva imagen
-    if (req.files && req.files.imagen) {
-      const imagen = req.files.imagen;
-      const nombreArchivo = `${Date.now()}_${imagen.name}`;
-      const rutaCompleta = path.join(uploadDir, nombreArchivo);
-      await imagen.mv(rutaCompleta);
-      camposActualizados.imagen = `/uploads/productos/${nombreArchivo}`;
+    if (req.file) {
+      camposActualizados.imagen = `http://localhost:3000/uploads/products/${req.file.filename}`;
     }
-    // Si envían URL desde JSON
     else if (req.body.imagen) {
       camposActualizados.imagen = req.body.imagen;
     }
@@ -162,9 +150,6 @@ const actualizarPorId = async (req, res) => {
   }
 };
 
-// ======================================================
-// ELIMINAR POR ID
-// ======================================================
 const eliminarPorId = async (req, res) => {
   try {
     const { id } = req.params;

@@ -6,12 +6,35 @@
     "version": "1.0.0"
   },
   "host": "localhost:3000",
-  "basePath": "/api/v1",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/guardarProducto": {
+    "/api/v1/upload": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/swagger.json": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/productos/guardarProducto": {
       "post": {
         "description": "",
         "parameters": [
@@ -41,9 +64,6 @@
                 },
                 "precioCompra": {
                   "example": "any"
-                },
-                "imagen": {
-                  "example": "any"
                 }
               }
             }
@@ -68,7 +88,7 @@
         }
       }
     },
-    "/todosProductos": {
+    "/api/v1/productos/todosProductos": {
       "get": {
         "description": "",
         "responses": {
@@ -81,7 +101,7 @@
         }
       }
     },
-    "/porId/{id}": {
+    "/api/v1/productos/porId/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -105,7 +125,7 @@
         }
       }
     },
-    "/actualizar/{id}": {
+    "/api/v1/productos/actualizar/{id}": {
       "patch": {
         "description": "",
         "parameters": [
@@ -114,11 +134,26 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "imagen": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"
@@ -129,7 +164,7 @@
         }
       }
     },
-    "/eliminar/{id}": {
+    "/api/v1/productos/eliminar/{id}": {
       "delete": {
         "description": "",
         "parameters": [
@@ -153,7 +188,7 @@
         }
       }
     },
-    "/guardarProveedor": {
+    "/api/v1/proveedores/guardarProveedor": {
       "post": {
         "description": "",
         "parameters": [
@@ -195,7 +230,7 @@
         }
       }
     },
-    "/obtenertodos": {
+    "/api/v1/proveedores/obtenertodos": {
       "get": {
         "description": "",
         "responses": {
@@ -208,7 +243,7 @@
         }
       }
     },
-    "/por/{id}": {
+    "/api/v1/proveedores/por/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -231,9 +266,8 @@
           }
         }
       }
-    }
-    ,
-    "/proveedor/actualizar/{id}": {
+    },
+    "/api/v1/proveedores/actualizar/{id}": {
       "patch": {
         "description": "",
         "parameters": [
@@ -257,7 +291,7 @@
         }
       }
     },
-    "/proveedor/eliminar/{id}": {
+    "/api/v1/proveedores/eliminar/{id}": {
       "delete": {
         "description": "",
         "parameters": [
