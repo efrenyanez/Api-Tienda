@@ -12,9 +12,9 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 // ======================================================
 const guardarProducto = async (req, res) => {
   try {
-    const { nombre, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra } = req.body;
+    const { nombre, descripcion, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra } = req.body;
 
-    if (!nombre || !precio || !stock || !fechaCaducidad || !fechaCompra || !provedor || !precioCompra) {
+    if (!nombre || !descripcion || !precio || !stock || !fechaCaducidad || !fechaCompra || !provedor || !precioCompra) {
       return res.status(400).json({ status: "error", message: "Todos los campos son obligatorios." });
     }
 
@@ -38,6 +38,7 @@ const guardarProducto = async (req, res) => {
 
     const nuevoProducto = new Producto({
       nombre,
+      descripcion,
       precio,
       stock,
       fechaCaducidad,
