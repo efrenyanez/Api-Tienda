@@ -1,7 +1,7 @@
 import SlideBar from "../components/sliderbar";
 import CardProducto from "../components/cardproducto"; // 🔹 Importa el componente de productos
 import CardProveedor from "../components/card"; // 🔹 Este es el de proveedores
-import Footer from "../components/Footer";
+//import Footer from "../components/Footer";
 
 export default function Home() {
   return (
@@ -20,7 +20,6 @@ export default function Home() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

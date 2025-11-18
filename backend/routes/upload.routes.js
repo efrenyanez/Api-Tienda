@@ -5,15 +5,12 @@ import fs from "fs";
 
 const router = express.Router();
 
-// 📁 Carpeta donde se guardarán las imágenes
 const uploadDir = path.join(process.cwd(), "uploads");
 
-// Si no existe la carpeta, la creamos
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-// ⚙️ Configuración del almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
@@ -24,7 +21,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// 📤 Ruta para subir imagen
 router.post("/", upload.single("imagen"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No se subió ningún archivo" });
