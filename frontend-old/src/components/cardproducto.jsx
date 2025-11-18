@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import api from "../api/api.js";
-import ProductDetails from "../pages/ProductsDetails.jsx";
-import "../pages/css/home.css";
-import "../css/card.css";
 
 export default function CardProducto() {
   const [productos, setProductos] = useState([]);
   const [proveedores, setProveedores] = useState([]);
-  const [selectedProducto, setSelectedProducto] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const cargarProductos = async () => {
     try {
@@ -70,7 +65,6 @@ export default function CardProducto() {
       title: "Editar Producto",
       html: `
         <input id="swal-nombre" class="swal2-input" placeholder="Nombre" value="${producto.nombre}">
-        <textarea id="swal-descripcion" class="swal2-textarea" placeholder="Descripción">${producto.descripcion || ''}</textarea>
         <input id="swal-precio" type="number" class="swal2-input" placeholder="Precio venta" value="${producto.precio}">
         <input id="swal-precioCompra" type="number" class="swal2-input" placeholder="Precio compra" value="${producto.precioCompra}">
         <input id="swal-stock" type="number" class="swal2-input" placeholder="Stock" value="${producto.stock}">
@@ -95,7 +89,6 @@ export default function CardProducto() {
       cancelButtonText: "Cancelar",
       preConfirm: () => {
         const nombre = document.getElementById("swal-nombre").value;
-        const descripcion = document.getElementById("swal-descripcion").value;
         const precio = document.getElementById("swal-precio").value;
         const precioCompra = document.getElementById("swal-precioCompra").value;
         const stock = document.getElementById("swal-stock").value;
@@ -112,7 +105,6 @@ export default function CardProducto() {
 
         const formData = new FormData();
         formData.append("nombre", nombre);
-        formData.append("descripcion", descripcion);
         formData.append("precio", precio);
         formData.append("precioCompra", precioCompra);
         formData.append("stock", stock);
@@ -137,16 +129,6 @@ export default function CardProducto() {
     }
   };
 
-  const handleCardClick = (producto) => {
-    setSelectedProducto(producto);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProducto(null);
-  };
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
@@ -158,70 +140,77 @@ export default function CardProducto() {
           No hay productos registrados todavía.
         </p>
       ) : (
-        <div className="cards-wrapper">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {productos.map((producto) => (
-            <div 
-              key={producto._id} 
-              className="card simple-card clickable-card" 
-              onClick={() => handleCardClick(producto)}
+            <div
+              key={producto._id}
+              className="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all"
             >
               {producto.imagen ? (
-                <img src={producto.imagen} alt={producto.nombre} className="card-image" />
+                <img
+                  src={producto.imagen}
+                  alt={producto.nombre}
+                  className="w-full h-48 object-cover"
+                />
               ) : (
-                <div className="card-image card-image--placeholder">Sin imagen</div>
+                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                  Sin imagen
+                </div>
               )}
 
-              <div className="card-body">
-                <h2 className="card-title">{producto.nombre}</h2>
-                <p className="card-price">${Number(producto.precio).toFixed(2)}</p>
-                
-                {producto.descripcion && (
-                  <p className="card-description">{producto.descripcion.length > 50 ? producto.descripcion.substring(0, 50) + '...' : producto.descripcion}</p>
+              <div className="p-4">
+                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                  {producto.nombre}
+                </h2>
+                <p className="text-sm text-gray-600 mb-1">
+                  💰 <strong>Precio venta:</strong> ${producto.precio}
+                </p>
+                <p className="text-sm text-gray-600 mb-1">
+                  🏷️ <strong>Precio compra:</strong> ${producto.precioCompra}
+                </p>
+                <p className="text-sm text-gray-600 mb-1">
+                  📦 <strong>Stock:</strong> {producto.stock}
+                </p>
+                <p className="text-sm text-gray-600 mb-1">
+                  📅 <strong>Compra:</strong>{" "}
+                  {new Date(producto.fechaCompra).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-600 mb-3">
+                  ⏳ <strong>Caducidad:</strong>{" "}
+                  {new Date(producto.fechaCaducidad).toLocaleDateString()}
+                </p>
+
+                {producto.provedor ? (
+                  <div className="bg-gray-50 p-3 rounded-lg text-sm border border-gray-100 mb-3">
+                    <p className="font-semibold text-gray-800">🧾 Proveedor</p>
+                    <p>👤 {producto.provedor.nombre}</p>
+                    <p>📍 {producto.provedor.direccion}</p>
+                    <p>📞 {producto.provedor.telefono}</p>
+                    <p>✉️ {producto.provedor.correo}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-sm italic">Sin proveedor asignado</p>
                 )}
 
-                <div className="stock-line">
-                  <span
-                    className={`stock-dot ${Number(producto.stock) > 0 ? 'green' : 'red'}`}
-                    aria-hidden="true"
-                  ></span>
-                  <span className="stock-text">{Number(producto.stock) > 0 ? 'Disponible' : 'Agotado'}</span>
-                </div>
-
-                <div className="dates-row">
-                  <div className="date-item">
-                    <label>Fecha Caducidad:</label>
-                    <div>{producto.fechaCaducidad ? new Date(producto.fechaCaducidad).toLocaleDateString('es-ES') : 'DD/MM/AAAA'}</div>
-                  </div>
-                  <div className="date-item">
-                    <label>Fecha de compra:</label>
-                    <div>{producto.fechaCompra ? new Date(producto.fechaCompra).toLocaleDateString('es-ES') : 'DD/MM/AAAA'}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="provider-block">
-                <div>
-                  <label>Proveedor:</label>
-                  <div>{producto.provedor ? producto.provedor.nombre : '-'}</div>
-                </div>
-                <div>
-                  <label>Precio de compra:</label>
-                  <div>${producto.precioCompra ? Number(producto.precioCompra).toFixed(2) : '0.00'}</div>
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => editarProducto(producto)}
+                    className="flex-1 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-all"
+                  >
+                    ✏️ Editar
+                  </button>
+                  <button
+                    onClick={() => eliminarProducto(producto._id)}
+                    className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-all"
+                  >
+                    🗑️ Eliminar
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
-
-      {/* Modal de Detalles del Producto */}
-      <ProductDetails
-        producto={selectedProducto}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onEdit={editarProducto}
-        onDelete={eliminarProducto}
-      />
     </div>
   );
 }

@@ -8,6 +8,10 @@ const uploadDir = path.join(__dirname, '../uploads/products');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 const guardarProducto = async (req, res) => {
   try {
+    // Log rápido para debugging: campos y archivo recibido
+    console.log('guardarProducto - req.body:', req.body);
+    console.log('guardarProducto - req.file:', req.file ? req.file.filename : null);
+
     const { nombre, descripcion, precio, stock, fechaCaducidad, fechaCompra, provedor, precioCompra } = req.body;
 
     if (!nombre || !descripcion || !precio || !stock || !fechaCaducidad || !fechaCompra || !provedor || !precioCompra) {

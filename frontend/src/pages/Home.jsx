@@ -1,25 +1,28 @@
-import SlideBar from "../components/sliderbar";
-import CardProducto from "../components/cardproducto"; // 🔹 Importa el componente de productos
-import CardProveedor from "../components/card"; // 🔹 Este es el de proveedores
-//import Footer from "../components/Footer";
+import CardProducto from "../components/cardproducto";
+import CardProveedor from "../components/card";
+import Layout from "../components/Layout";
+import "./css/home.css";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <SlideBar />
+    <Layout pageTitle="Sistema de Gestión" activePage="home">
+      <div className="grid-container">
+        <section className="content-card">
+          <div className="card-header">
+            <div className="card-icon">📦</div>
+            <h2 className="card-title">Productos</h2>
+          </div>
+          <CardProducto />
+        </section>
 
-      <main className="flex-1 p-6 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          Productos y Proveedores
-        </h1>
-
-        {/* 🔹 Contenedor lado a lado */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <CardProducto />  {/* 🧩 Productos */}
-          <CardProveedor /> {/* 🧩 Proveedores */}
-        </div>
-      </main>
-
-    </div>
+        <section className="content-card">
+          <div className="card-header">
+            <div className="card-icon">🏢</div>
+            <h2 className="card-title">Proveedores</h2>
+          </div>
+          <CardProveedor />
+        </section>
+      </div>
+    </Layout>
   );
 }

@@ -1,9 +1,8 @@
-// src/pages/CrearProveedor.jsx
-
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import api from "../api/api.js";
-import Sidebar from "../components/sliderbar.jsx";
+import Layout from "../components/Layout";
+import "./css/proveedor.css";
 
 export default function CrearProveedor() {
   const [proveedor, setProveedor] = useState({
@@ -13,12 +12,10 @@ export default function CrearProveedor() {
     correo: "",
   });
 
-  // 🔹 Manejar cambios en los inputs
   const handleChange = (e) => {
     setProveedor({ ...proveedor, [e.target.name]: e.target.value });
   };
 
-  // 🔹 Validar campos básicos
   const validarCampos = () => {
     const { nombre, direccion, telefono, correo } = proveedor;
     if (!nombre || !direccion || !telefono || !correo) {
@@ -29,7 +26,7 @@ export default function CrearProveedor() {
       });
       return false;
     }
-    // Validación simple de correo
+    
     const regexCorreo = /^\S+@\S+\.\S+$/;
     if (!regexCorreo.test(correo)) {
       Swal.fire({
@@ -42,13 +39,11 @@ export default function CrearProveedor() {
     return true;
   };
 
-  // 🔹 Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarCampos()) return;
 
     try {
-      // 🔹 Mostrar SweetAlert de carga
       Swal.fire({
         title: "Creando proveedor...",
         allowOutsideClick: false,
@@ -59,7 +54,6 @@ export default function CrearProveedor() {
 
       await api.guardarProveedor(proveedor);
 
-      // 🔹 Cerrar carga y mostrar éxito
       Swal.fire({
         icon: "success",
         title: "Proveedor creado correctamente",
@@ -67,7 +61,6 @@ export default function CrearProveedor() {
         timer: 1500,
       });
 
-      // Limpiar formulario
       setProveedor({
         nombre: "",
         direccion: "",
@@ -75,106 +68,93 @@ export default function CrearProveedor() {
         correo: "",
       });
     } catch (error) {
-      Swal.close(); // cerrar loader si hay error
-
-      const mensaje =
-        error.message === "El proveedor ya existe"
-          ? "Ya existe un proveedor con ese nombre."
-          : "No se pudo crear el proveedor.";
-
+      Swal.close();
+      const mensaje = error.message === "El proveedor ya existe"
+        ? "Ya existe un proveedor con ese nombre."
+        : "No se pudo crear el proveedor.";
+      
       Swal.fire({
         icon: "error",
         title: "Error",
         text: mensaje,
       });
-
       console.error("Error al crear proveedor:", error);
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar />
+    <Layout pageTitle="Crear Proveedor" activePage="proveedor">
+      <div className="crear-proveedor-header">
+        <h1 className="crear-proveedor-title">🏢 Crear Nuevo Proveedor</h1>
+        <p className="crear-proveedor-subtitle">Completa la información del proveedor</p>
+      </div>
 
-      {/* Contenido principal */}
-      <div className="flex-1 p-6 bg-gray-100">
-        <h1 className="text-2xl font-bold mb-6">Crear Proveedor</h1>
+      <div className="proveedor-form-container">
+        <form onSubmit={handleSubmit} className="proveedor-form">
+          <div className="proveedor-form-grid">
+            <div className="form-group">
+              <label className="form-label">Nombre del Proveedor *</label>
+              <input
+                type="text"
+                name="nombre"
+                value={proveedor.nombre}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Ej: TecnoSupply S.A."
+              />
+            </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg"
-        >
-          {/* Nombre */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Nombre
-            </label>
-            <input
-              type="text"
-              name="nombre"
-              value={proveedor.nombre}
-              onChange={handleChange}
-              placeholder="Nombre del proveedor"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+            <div className="form-group">
+              <label className="form-label">Dirección *</label>
+              <input
+                type="text"
+                name="direccion"
+                value={proveedor.direccion}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Ej: Av. Principal #123, Ciudad"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Teléfono *</label>
+              <input
+                type="text"
+                name="telefono"
+                value={proveedor.telefono}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Ej: +1 234 567 890"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Correo Electrónico *</label>
+              <input
+                type="email"
+                name="correo"
+                value={proveedor.correo}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Ej: contacto@proveedor.com"
+              />
+            </div>
           </div>
 
-          {/* Dirección */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Dirección
-            </label>
-            <input
-              type="text"
-              name="direccion"
-              value={proveedor.direccion}
-              onChange={handleChange}
-              placeholder="Dirección"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          {/* Teléfono */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Teléfono
-            </label>
-            <input
-              type="text"
-              name="telefono"
-              value={proveedor.telefono}
-              onChange={handleChange}
-              placeholder="Teléfono"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          {/* Correo */}
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Correo
-            </label>
-            <input
-              type="email"
-              name="correo"
-              value={proveedor.correo}
-              onChange={handleChange}
-              placeholder="Correo electrónico"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
+          <div className="form-actions">
+            <button type="button" className="btn btn-secondary">
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-primary">
               Crear Proveedor
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Layout>
   );
 }
