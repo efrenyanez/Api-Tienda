@@ -176,7 +176,7 @@ export default function CardProducto() {
                 <p className="card-price">${Number(producto.precio).toFixed(2)}</p>
                 
                 {producto.descripcion && (
-                  <p className="card-description">{producto.descripcion.length > 50 ? producto.descripcion.substring(0, 50) + '...' : producto.descripcion}</p>
+                  <p className="card-description">{producto.descripcion.split(' ').slice(0, 4).join(' ')}{producto.descripcion.split(' ').length > 4 ? '...' : ''}</p>
                 )}
 
                 <div className="stock-line">
