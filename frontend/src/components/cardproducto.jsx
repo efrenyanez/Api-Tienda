@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import api from "../api/api.js";
 import ProductDetails from "../pages/ProductsDetails.jsx";
 import "../pages/css/home.css";
-import "../css/card.css";
+import "../css/card-simple.css";
 
 export default function CardProducto() {
   const [productos, setProductos] = useState([]);
@@ -79,13 +79,12 @@ export default function CardProducto() {
         <select id="swal-provedor" class="swal2-select">
           <option value="">Selecciona un proveedor</option>
           ${proveedores
-            .map(
-              (prov) =>
-                `<option value="${prov._id}" ${
-                  producto.provedor?._id === prov._id ? "selected" : ""
-                }>${prov.nombre}</option>`
-            )
-            .join("")}
+          .map(
+            (prov) =>
+              `<option value="${prov._id}" ${producto.provedor?._id === prov._id ? "selected" : ""
+              }>${prov.nombre}</option>`
+          )
+          .join("")}
         </select>
         <input id="swal-imagen" type="file" class="swal2-file" accept="image/*">
       `,
@@ -148,8 +147,8 @@ export default function CardProducto() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+    <div className="compact-container">
+      <h1 className="products-title">
         📦 Lista de Productos
       </h1>
 
@@ -160,9 +159,9 @@ export default function CardProducto() {
       ) : (
         <div className="cards-wrapper">
           {productos.map((producto) => (
-            <div 
-              key={producto._id} 
-              className="card simple-card clickable-card" 
+            <div
+              key={producto._id}
+              className="card simple-card clickable-card"
               onClick={() => handleCardClick(producto)}
             >
               {producto.imagen ? (
@@ -171,44 +170,42 @@ export default function CardProducto() {
                 <div className="card-image card-image--placeholder">Sin imagen</div>
               )}
 
-              <div className="card-body">
-                <h2 className="card-title">{producto.nombre}</h2>
-                <p className="card-price">${Number(producto.precio).toFixed(2)}</p>
-                
-                {producto.descripcion && (
-                  <p className="card-description">{producto.descripcion.split(' ').slice(0, 4).join(' ')}{producto.descripcion.split(' ').length > 4 ? '...' : ''}</p>
+              <div className="simple-card-content">
+
+                {/* NOMBRE + PRECIO + DESCRIPCIÓN */}
+                <div className="top-info">
+                  <div>
+                    <h3 className="product-name">{producto.nombre}</h3>
+                    <p className="product-description">{producto.descripcion || "Sin descripción"}</p>
+                  </div>
+                  <div className="price-tag">${Number(producto.precio).toFixed(2)}</div>
+                </div>
+
+                {/* STOCK Y FECHAS */}
+                <div className="middle-info">
+                  <div className="stock-simple">
+                    <span>Stock: {producto.stock}</span>
+                    <div className={`status-indicator ${Number(producto.stock) > 0 ? 'available' : 'unavailable'}`}></div>
+                  </div>
+
+                  <div className="dates-info">
+                    <p>Fecha cad: {producto.fechaCaducidad?.split("T")[0] || "--"}</p>
+                    <p>Compra: {producto.fechaCompra?.split("T")[0] || "--"}</p>
+                  </div>
+                </div>
+
+                {/* PROVEEDOR */}
+                {producto.provedor && (
+                  <div className="provider-simple">
+                    <span>Proveedor: {producto.provedor.nombre}</span>
+                  </div>
                 )}
 
-                <div className="stock-line">
-                  <span
-                    className={`stock-dot ${Number(producto.stock) > 0 ? 'green' : 'red'}`}
-                    aria-hidden="true"
-                  ></span>
-                  <span className="stock-text">{Number(producto.stock) > 0 ? 'Disponible' : 'Agotado'}</span>
-                </div>
+                {/* PRECIO DE COMPRA */}
+                <p className="compra-tag">Precio de compra: ${producto.precioCompra || "--"}</p>
 
-                <div className="dates-row">
-                  <div className="date-item">
-                    <label>Fecha Caducidad:</label>
-                    <div>{producto.fechaCaducidad ? new Date(producto.fechaCaducidad).toLocaleDateString('es-ES') : 'DD/MM/AAAA'}</div>
-                  </div>
-                  <div className="date-item">
-                    <label>Fecha de compra:</label>
-                    <div>{producto.fechaCompra ? new Date(producto.fechaCompra).toLocaleDateString('es-ES') : 'DD/MM/AAAA'}</div>
-                  </div>
-                </div>
               </div>
 
-              <div className="provider-block">
-                <div>
-                  <label>Proveedor:</label>
-                  <div>{producto.provedor ? producto.provedor.nombre : '-'}</div>
-                </div>
-                <div>
-                  <label>Precio de compra:</label>
-                  <div>${producto.precioCompra ? Number(producto.precioCompra).toFixed(2) : '0.00'}</div>
-                </div>
-              </div>
             </div>
           ))}
         </div>

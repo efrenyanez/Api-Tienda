@@ -44,12 +44,21 @@ export default function CardProveedor() {
         <div className="cards-wrapper providers">
           {proveedores.map((prov) => (
             <div key={prov._id} className="card provider-card">
-              <h3 className="card-title">{prov.nombre}</h3>
-              <p className="card-text">📍 {prov.direccion}</p>
-              <p className="card-text">📞 {prov.telefono}</p>
-              <p className="card-text">✉️ {prov.correo}</p>
-
-
+              <h3 className="provider-name">{prov.nombre}</h3>
+              <div className="provider-info">
+                <p className="provider-item">
+                  <span className="provider-icon">📍</span>
+                  <span className="provider-value">{prov.direccion}</span>
+                </p>
+                <p className="provider-item">
+                  <span className="provider-icon">📞</span>
+                  <span className="provider-value">{prov.telefono}</span>
+                </p>
+                <p className="provider-item">
+                  <span className="provider-icon">✉️</span>
+                  <span className="provider-value">{prov.correo}</span>
+                </p>
+              </div>
             </div>
           ))}
         </div>

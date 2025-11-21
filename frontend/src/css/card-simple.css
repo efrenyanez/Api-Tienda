@@ -1,0 +1,167 @@
+/* ===== TÍTULOS Y CONTENEDORES ===== */
+.compact-container {
+  background: #ffffff;
+  color: #000000;
+}
+
+.products-title {
+  color: #000000 !important;
+}
+
+/* ===== TARJETA - DISEÑO ESTABLE ===== */
+.card {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 14px;
+  padding: 18px;
+
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-template-rows: auto auto auto auto;
+  gap: 12px;
+
+  max-width: 420px; /* perfecto para 2 por fila */
+  width: 100%;
+  min-height: 160px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== IMAGEN ===== */
+.card-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #000000;
+  grid-row: 1 / 3;
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.simple-card-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 6px;
+}
+
+/* ===== FILA SUPERIOR: NOMBRE + PRECIO ===== */
+.top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-column: 2;
+  margin-top: -6px;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.price-tag {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000 !important;
+  white-space: nowrap;
+}
+
+/* ===== DESCRIPCIÓN ===== */
+.product-description {
+  grid-column: 2;
+  grid-row: 2;
+
+  background: transparent;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #000000 !important;
+  line-height: 1.3;
+
+  max-width: 260px;
+}
+
+/* ===== STOCK + FECHAS ===== */
+.middle-info {
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* STOCK */
+.stock-simple {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stock-simple span {
+  font-size: 13px;
+  color: #000000 !important;
+}
+
+.status-indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.status-indicator.available { background: #000000; }
+.status-indicator.unavailable { background: #000000; }
+
+/* FECHAS */
+.dates-info {
+  text-align: right;
+}
+
+.dates-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #000000 !important;
+}
+
+/* ===== PROVEEDOR ===== */
+.provider-simple {
+  grid-column: 2;
+  font-size: 13px;
+  color: #000000 !important;
+  margin-top: 4px;
+}
+
+/* ===== PRECIO DE COMPRA ===== */
+.compra-tag {
+  grid-column: 2;
+  font-size: 13px;
+  color: #000000 !important;
+}
+
+/* ===== FIX GLOBAL PARA TEXTO INVISIBLE ===== */
+.card h3,
+.card span,
+.card p,
+.card div {
+  color: #000000 !important;
+}
+
+/* Precio en negro */
+.price-tag {
+  color: #000000 !important;
+}
+
+/* ===== GRID GENERAL ===== */
+.cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  justify-items: center;
+}

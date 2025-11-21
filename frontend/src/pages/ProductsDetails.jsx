@@ -42,12 +42,12 @@ const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete }) => {
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#6b7280",
-      background: "#374151",
-      color: "#f9fafb",
+      confirmButtonColor: "#000000",
+      cancelButtonColor: "#666666",
+      background: "#ffffff",
+      color: "#000000",
       customClass: {
-        popup: 'swal-dark-popup'
+        popup: 'swal-monochrome-popup'
       }
     });
 

@@ -1,38 +1,31 @@
-.crear-proveedor-container {
+/* ===== FORMULARIO PROVEEDOR - COMPONENTE INDEPENDIENTE ===== */
+
+.formulario-proveedor-container {
   background: #ffffff;
   min-height: 100vh;
-}
-
-.crear-proveedor-content {
   padding: 20px;
-  margin-left: 256px;
   box-sizing: border-box;
 }
 
-.crear-proveedor-content.with-sidebar {
-  margin-left: 256px;
-}
-
-.crear-proveedor-header {
+.formulario-proveedor-header {
   margin-bottom: 20px;
   padding: 10px 0;
+  text-align: center;
 }
 
-.crear-proveedor-title {
+.formulario-proveedor-title {
   font-size: 28px;
   font-weight: bold;
   color: #000000;
   margin-bottom: 8px;
-  text-align: center;
 }
 
-.crear-proveedor-subtitle {
+.formulario-proveedor-subtitle {
   color: #000000;
   font-size: 16px;
-  text-align: center;
 }
 
-.proveedor-form-container {
+.proveedor-form-wrapper {
   background: #ffffff;
   border: 2px solid #000000;
   border-radius: 12px;
@@ -139,17 +132,11 @@
     gap: 16px;
   }
   
-  .crear-proveedor-content {
+  .formulario-proveedor-container {
     padding: 15px;
-    margin-left: 0;
-    width: 100%;
   }
   
-  .crear-proveedor-content.with-sidebar {
-    margin-left: 0;
-  }
-  
-  .proveedor-form-container {
+  .proveedor-form-wrapper {
     padding: 24px;
     margin: 10px auto 100px auto;
   }
@@ -159,7 +146,7 @@
     gap: 12px;
   }
   
-  .crear-proveedor-title {
+  .formulario-proveedor-title {
     font-size: 24px;
   }
   
@@ -167,6 +154,4 @@
     width: 100%;
     justify-content: center;
   }
-  
-
 }
