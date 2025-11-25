@@ -7,4 +7,3 @@ router.get('/todos', CajeroController.obtenerTodos);
 router.get('/porId/:id', CajeroController.obtenerPorId);
 
 module.exports = router;
-z

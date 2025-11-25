@@ -13,4 +13,6 @@ router.get('/porId/:id', AdminController.obtenerPorId)
 // ActualizarPorID
 router.patch('/actualizaradmin/:id', AdminController.actualizarPorId)
 // Eliminar
-router.delete('/eliminaradmin/:id', AdminController.eliminarPorId)
+router.delete('/eliminaradmin/:id', AdminController.eliminarPorId);
+
+module.exports = router;
