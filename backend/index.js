@@ -3,9 +3,8 @@ const cors = require("cors");
 const db = require("./database/database.js");
 const ProductoRutas = require("./routes/productos.routes.js");
 const ProveedorRutas = require("./routes/provedor.routes.js");
-const AdminRutas= require("./routes/admin.routes.js");
-const GerenteRutas = require("./routes/gerente.routes.js");
-const CajeroRutas = require("./routes/cajero.routes.js");
+const RegisterRutas = require("./routes/register.routes.js");
+const LoginRutas= require("./routes/login.routes.js");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
@@ -44,9 +43,8 @@ app.use("/uploads", express.static(uploadDir));
 
 app.use("/api/v1/productos", ProductoRutas);
 app.use("/api/v1/proveedores", ProveedorRutas);
-app.use("/api/v1/admin", AdminRutas);
-app.use("/api/v1/gerente", GerenteRutas);
-app.use("/api/v1/cajero", CajeroRutas)
+app.use("/api/v1/register", RegisterRutas);
+app.use("/api/v1/login", LoginRutas);
 // Documentación interactiva (Scalar)
 app.use(
   "/doc",
