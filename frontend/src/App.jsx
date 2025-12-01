@@ -11,11 +11,13 @@ import ProtectedRoute from "./components/protectedRoute";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  //variable para guardar el rol del usuario
+  const [userRole, setUserRole] = React.useState(null);
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setUserRole={setUserRole} />} />
         <Route
           path="/principal"
           element={

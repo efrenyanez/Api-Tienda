@@ -3,7 +3,7 @@ import './css/login.css'
 import { loginRequest, isUserAdmin } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage({ setIsAuthenticated, setIsAdmin }) {
+export default function LoginPage({ setIsAuthenticated, setUserRole }) {
 
     const navigate = useNavigate();
 
@@ -33,15 +33,15 @@ export default function LoginPage({ setIsAuthenticated, setIsAdmin }) {
             const data = await loginRequest(email, password);
             console.log("Login correcto:", data);
 
-            // Verificar si es admin
-            const adminStatus = isUserAdmin(data);
-            console.log("Es admin:", adminStatus);
+            // Guardar el rol del usuario globalmente
+            const userRole = data.usuario?.rol;
+            console.log("Rol del usuario:", userRole);
 
             setIsAuthenticated(true);
             
-            // Guardar el estado de admin si se proporciona la función
-            if (setIsAdmin) {
-                setIsAdmin(adminStatus);
+            // Guardar el rol del usuario si se proporciona la función
+            if (setUserRole) {
+                setUserRole(userRole);
             }
 
             // Siempre redirigir a /principal, pero con diferente rol

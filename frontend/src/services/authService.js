@@ -1,108 +1,64 @@
 //Funcion del login
 
-/* export async function loginRequest(email, password) {
+export async function loginRequest(email, password) {
   try {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("http://localhost:3000/api/v1/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ correo: email, contraseña: password })
     });
 
-    // Si la API responde con error (400, 401, etc)
+    // Si la API responde con error (400, 404, etc)
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Credenciales incorrectas");
+      throw new Error(errorData.msg || "Error en las credenciales");
     }
 
-    // Si todo está bien…
+    // Si todo está bien, devolvemos la respuesta del controlador
     const data = await response.json();
-    return data; // { user, token }
+    return data; // { msg: "Login exitoso", usuario: { id, nombre, rol } }
     
   } catch (error) {
     // Esto lo atrapará el LoginPage o el AuthContext
     throw error;
   }
-} */
-
-//Simulacion
-export async function loginRequest(email, password) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Usuario admin
-      if (email === "admin@admin.com" && password === "admin123") {
-        resolve({
-          user: {
-            id: 1,
-            name: "Administrador",
-            email: email,
-            role: "admin"
-          },
-          token: "fake-admin-token-123",
-          isAdmin: true
-        });
-      }
-      // Usuario demo normal
-      else if (email === "demo@demo.com" && password === "123456") {
-        resolve({
-          user: {
-            id: 2,
-            name: "Usuario Demo",
-            email: email,
-            role: "user"
-          },
-          token: "fake-user-token-123",
-          isAdmin: false
-        });
-      } else {
-        reject(new Error("Credenciales incorrectas"));
-      }
-    }, 1000);
-  });
 }
 
-// Función para verificar si un usuario es admin
-export function isUserAdmin(userData) {
-  return userData?.user?.role === "admin" || userData?.isAdmin === true;
+// Función para verificar si el usuario es admin
+export function isUserAdmin(loginResponse) {
+  // Verificamos si la respuesta tiene la estructura correcta y si el rol es admin
+  return loginResponse?.usuario?.rol === "admin";
 }
 
-//Funcion del registro - Simulacion
+// Función del registro
 export async function registerRequest(email, password) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Simular validaciones
-      if (!email || !password) {
-        reject(new Error("Todos los campos son requeridos"));
-        return;
-      }
-      
-      if (!email.includes("@") || !email.includes(".")) {
-        reject(new Error("El correo no es válido"));
-        return;
-      }
-      
-      if (password.length < 6) {
-        reject(new Error("La contraseña debe tener al menos 6 caracteres"));
-        return;
-      }
-      
-      // Simular que el email ya existe
-      if (email === "demo@demo.com") {
-        reject(new Error("Este correo ya está registrado"));
-        return;
-      }
-      
-      // Registro exitoso - usuarios registrados son siempre usuarios normales
-      resolve({
-        user: {
-          id: Math.floor(Math.random() * 1000),
-          email: email,
-          role: "user"
-        },
-        token: "fake-token-" + Math.random().toString(36).substr(2, 9),
-        isAdmin: false
-      });
-    }, 1500);
-  });
+  try {
+    const response = await fetch("http://localhost:3000/api/v1/register/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        correo: email, 
+        contraseña: password
+        // El rol será asignado posteriormente por el administrador
+      })
+    });
+
+    // Si la API responde con error (400, 500, etc)
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.msg || "Error al registrar usuario");
+    }
+
+    // Si todo está bien, devolvemos la respuesta del controlador
+    const data = await response.json();
+    return data; // { msg: "Usuario registrado", usuario: { nombre, correo, rol, etc. } }
+    
+  } catch (error) {
+    // Esto lo atrapará el RegisterPage
+    throw error;
+  }
 }

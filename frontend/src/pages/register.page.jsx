@@ -41,18 +41,11 @@ export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
             const data = await registerRequest(email, password);
             console.log("Registro correcto:", data);
 
-            // Verificar si es admin (usuarios registrados siempre son normales)
-            const adminStatus = isUserAdmin(data);
+            // Mostrar mensaje de éxito del backend
+            alert(data.msg || "Usuario registrado correctamente. Espera a que el administrador te asigne un rol.");
             
-            setIsAuthenticated(true);
-            
-            // Guardar el estado de admin si se proporciona la función
-            if (setIsAdmin) {
-                setIsAdmin(adminStatus);
-            }
-            
-            // Los usuarios registrados van siempre a la página principal
-            navigate("/principal");
+            // Redirigir al login para que inicie sesión cuando tenga rol asignado
+            navigate("/");
 
         } catch (err) {
             setError(err.message);
@@ -98,7 +91,7 @@ export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
                     {loading ? 'Registrando...' : 'Crear cuenta'}
                 </button>
 
-                <a className="link" href="/login">¿Ya tienes cuenta? Inicia sesión</a>
+                <a className="link" href="/">¿Ya tienes cuenta? Inicia sesión</a>
 
                 {error && <p style={{ color: "red" }}>{error}</p>}
             </div>

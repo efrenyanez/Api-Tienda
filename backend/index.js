@@ -31,14 +31,14 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
-
+/* 
 app.post("/api/v1/upload", upload.single("imagen"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No se subió ningún archivo" });
 
   const imageUrl = `http://localhost:${PORT}/uploads/products/${req.file.filename}`;
   res.json({ url: imageUrl });
 });
-
+ */
 app.use("/uploads", express.static(uploadDir));
 
 app.use("/api/v1/productos", ProductoRutas);
@@ -49,7 +49,7 @@ app.use("/api/v1/login", LoginRutas);
 app.use(
   "/doc",
   apiReference({
-    spec: { url: "/swagger.json" },
+    spec: { url: "swagger.json" },
     theme: "mars",
     darkMode: true,
     layout: "modern",
