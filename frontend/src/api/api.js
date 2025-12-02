@@ -287,6 +287,52 @@ const api = {
       throw error;
     }
   },
+
+  // ================= USUARIOS =================
+  obtenerUsuarios: async () => {
+    try {
+      const res = await fetch(`${API_URL}/usuarios`, {
+        headers: getAuthHeaders(),
+      });
+      handleAuthError(res);
+      if (!res.ok) throw new Error("Error al obtener usuarios");
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en obtenerUsuarios:", error);
+      throw error;
+    }
+  },
+
+  eliminarUsuario: async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/usuarios/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
+      handleAuthError(res);
+      if (!res.ok) throw new Error("Error al eliminar usuario");
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en eliminarUsuario:", error);
+      throw error;
+    }
+  },
+
+  asignarRol: async (id, role) => {
+    try {
+      const res = await fetch(`${API_URL}/usuarios/${id}/role`, {
+        method: "PATCH",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ role }),
+      });
+      handleAuthError(res);
+      if (!res.ok) throw new Error("Error al asignar rol");
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en asignarRol:", error);
+      throw error;
+    }
+  },
 };
 
 export default api;
