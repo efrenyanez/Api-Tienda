@@ -22,7 +22,7 @@ export default function SlideBar() {
         <h2 className="panel-title">Panel de Control</h2>
         <nav className="panel-nav">
           <Link
-            to="/"
+            to="/principal"
             className="panel-button"
           >
             <Home size={20} /> 

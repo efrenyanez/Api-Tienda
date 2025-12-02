@@ -37,8 +37,9 @@ export default function LoginPage({ setIsAuthenticated, setUserRole }) {
             const userRole = data.usuario?.rol;
             console.log("Rol del usuario:", userRole);
 
-            // Guardar el rol en localStorage
+            // Guardar en localStorage
             localStorage.setItem("userRole", userRole);
+            localStorage.setItem("isAuthenticated", "true");
 
             setIsAuthenticated(true);
             

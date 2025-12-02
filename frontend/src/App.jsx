@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Principal from "./pages/Home.jsx";
 import CrearProducto from "./pages/CrearProducto.jsx";
@@ -13,6 +13,19 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   //variable para guardar el rol del usuario
   const [userRole, setUserRole] = React.useState(null);
+
+  // Recuperar la sesión del localStorage cuando la app se carga
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    const storedUserRole = localStorage.getItem("userRole");
+    
+    if (storedAuth === "true") {
+      setIsAuthenticated(true);
+      if (storedUserRole) {
+        setUserRole(storedUserRole);
+      }
+    }
+  }, []);
 
   return (
     <Router>

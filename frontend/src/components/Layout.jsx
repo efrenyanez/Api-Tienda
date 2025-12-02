@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Layout({ children, pageTitle, activePage }) {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [userRole, setUserRole] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Obtener el rol del usuario del localStorage
@@ -19,6 +21,16 @@ export default function Layout({ children, pageTitle, activePage }) {
   // Determinar si el usuario puede crear (admin o gerente)
   const canCreate = userRole === 'admin' || userRole === 'gerente';
 
+  // Función para cerrar sesión
+  const handleLogout = () => {
+    // Limpiar el localStorage
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userRole");
+    
+    // Redirigir al login
+    navigate("/");
+  };
+
   return (
     <div className="home-container">
       
@@ -28,7 +40,7 @@ export default function Layout({ children, pageTitle, activePage }) {
           
           <nav className="panel-nav">
             <a 
-              href="/" 
+              href="/principal" 
               className="panel-button"
               style={getButtonStyle('home')}
             >
@@ -72,6 +84,16 @@ export default function Layout({ children, pageTitle, activePage }) {
                   </a>
                 </>
               )}
+              
+              {/* Botón de cerrar sesión */}
+              <button 
+                onClick={handleLogout}
+                className="header-btn logout-btn"
+                title="Cerrar sesión"
+              >
+                <span>🚪</span>
+                <span>Cerrar Sesión</span>
+              </button>
             </div>
           </div>
         </header>
