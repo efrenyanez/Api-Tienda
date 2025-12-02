@@ -215,7 +215,7 @@
 /* ===== PRECIO DE COMPRA ===== */
 .compra-tag {
   grid-column: 2;
-  grid-row: 3;
+  grid-row: 5;
   font-size: 13px;
   color: #006600 !important;
   font-weight: 600;

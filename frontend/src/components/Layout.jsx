@@ -82,6 +82,12 @@ export default function Layout({ children, pageTitle, activePage }) {
                     <span>🏢</span>
                     <span>Crear Proveedor</span>
                   </a>
+                  <a 
+                    href="/usuarios" 
+                    className={`header-btn ${activePage === 'proveedor' ? 'active' : ''}`}
+                  >
+                    <span>Usuarios</span>
+                  </a>
                 </>
               )}
               

@@ -7,6 +7,7 @@ import CrearProveedor from "./pages/CrearProveedor.jsx";
 import LoginPage from "./pages/login.page.jsx";
 import RegisterPage from "./pages/register.page.jsx";
 import ProtectedRoute from "./components/protectedRoute";
+import Usuarios from "./pages/Usuarios.jsx";
 //import TokenDebugger from "./components/TokenDebugger";
 
 
@@ -56,6 +57,14 @@ export default function App() {
             element={
               <ProtectedRoute requireCRUD={true}>
                 <CrearProveedor />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/usuarios"
+            element={
+              <ProtectedRoute requireCRUD={true}>
+                <Usuarios />
               </ProtectedRoute>
             } 
           />
