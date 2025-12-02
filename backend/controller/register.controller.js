@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 /* =========================================================
    Registrar nuevo usuario (registro público)
    ========================================================= */
-module.exports.register = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { correo, contraseña } = req.body;
 
@@ -16,7 +16,7 @@ module.exports.register = async (req, res) => {
         const nuevo = new Usuario({
             correo,
             contraseña: hashed,
-            rol: "pendiente" // Rol asignado por admin después
+            rol: "pendiente" 
         });
 
         await nuevo.save();
@@ -36,7 +36,7 @@ module.exports.register = async (req, res) => {
 /* =========================================================
    Obtener todos los usuarios (solo ADMIN)
    ========================================================= */
-module.exports.obtenerTodos = async (req, res) => {
+const obtenerTodos = async (req, res) => {
     try {
         const usuarios = await Usuario.find().select("-contraseña");
         res.json({ usuarios });
@@ -50,7 +50,7 @@ module.exports.obtenerTodos = async (req, res) => {
 /* =========================================================
    Obtener usuario por ID (solo ADMIN)
    ========================================================= */
-module.exports.obtenerPorId = async (req, res) => {
+const obtenerPorId = async (req, res) => {
     try {
         const { id } = req.params;
         const usuario = await Usuario.findById(id).select("-contraseña");
@@ -68,14 +68,12 @@ module.exports.obtenerPorId = async (req, res) => {
 
 /* =========================================================
    Actualizar usuario (solo ADMIN)
-   Puede cambiar: correo, contraseña, rol
    ========================================================= */
-module.exports.actualizarPorId = async (req, res) => {
+const actualizarPorId = async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
 
-        // Si admin quiere cambiar contraseña
         if (data.contraseña) {
             data.contraseña = await bcrypt.hash(data.contraseña, 10);
         }
@@ -97,7 +95,7 @@ module.exports.actualizarPorId = async (req, res) => {
 /* =========================================================
    Eliminar usuario (solo ADMIN)
    ========================================================= */
-module.exports.eliminarUsuario = async (req, res) => {
+const eliminarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -110,4 +108,17 @@ module.exports.eliminarUsuario = async (req, res) => {
     } catch (error) {
         res.status(500).json({ msg: "Error al eliminar usuario", error: error.message });
     }
+};
+
+
+
+/* =========================================================
+   Exportar controladores correctamente
+   ========================================================= */
+module.exports = {
+    register,
+    obtenerTodos,
+    obtenerPorId,
+    actualizarPorId,
+    eliminarUsuario
 };
