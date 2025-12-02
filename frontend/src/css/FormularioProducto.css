@@ -2,16 +2,22 @@
 
 .formulario-producto-container {
   background: linear-gradient(135deg, #7ec0ee 0%, #5aa8d6 100%);
-  min-height: 100vh;
-  padding: 20px;
+  min-height: calc(100vh - 120px);
+  /* padding: 20px; */
   box-sizing: border-box;
   font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .formulario-producto-header {
   margin-bottom: 20px;
   padding: 10px 0;
   text-align: center;
+  width: 100%;
+  max-width: 900px;
 }
 
 .formulario-producto-title {
@@ -33,18 +39,41 @@
   background: linear-gradient(135deg, #ffcc00, #ffdd99);
   border: 5px solid #ff9900;
   border-radius: 20px;
-  padding: 30px;
+  padding: 2em;
+  width: 100%;
   max-width: 900px;
-  margin: 20px auto 120px auto;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  min-height: auto;
+  max-height: 75vh;
+  margin: 20px auto;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
 }
 
-.producto-form {
-  width: 100%;
+/* Personalizar la barra de desplazamiento */
+.producto-form-wrapper::-webkit-scrollbar {
+  width: 12px;
 }
+
+.producto-form-wrapper::-webkit-scrollbar-track {
+  background: #ffdd99;
+  border-radius: 10px;
+}
+
+.producto-form-wrapper::-webkit-scrollbar-thumb {
+  background: #ff9900;
+  border-radius: 10px;
+  border: 2px solid #ffdd99;
+}
+
+.producto-form-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #cc7700;
+}
+
+/* .producto-form {
+  width: 100%;
+} */
 
 .form-grid {
   display: grid;
@@ -201,13 +230,18 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
+  .formulario-producto-container {
+    padding: 16px;
+  }
+  
   .formulario-producto-title {
     font-size: 28px;
   }
   
   .producto-form-wrapper {
     padding: 24px;
-    margin: 15px auto 100px auto;
+    margin: 15px auto;
+    max-height: 70vh;
   }
 }
 
@@ -219,13 +253,20 @@
   
   .formulario-producto-container {
     padding: 12px;
+    min-height: calc(100vh - 80px);
   }
   
   .producto-form-wrapper {
     padding: 20px;
-    margin: 10px auto 80px auto;
+    margin: 10px auto;
     border-width: 3px;
     border-radius: 16px;
+    max-height: 65vh;
+  }
+  
+  /* Barra de desplazamiento más pequeña en móvil */
+  .producto-form-wrapper::-webkit-scrollbar {
+    width: 8px;
   }
   
   .form-actions {
@@ -265,15 +306,21 @@
 @media (max-width: 480px) {
   .formulario-producto-container {
     padding: 8px;
-    background: linear-gradient(135deg, #7ec0ee 0%, #5aa8d6 100%);
+    min-height: calc(100vh - 60px);
   }
   
   .producto-form-wrapper {
     padding: 15px;
-    margin: 10px auto 70px auto;
+    margin: 10px auto;
     border-radius: 12px;
     border-width: 3px;
     max-width: 100%;
+    max-height: 60vh;
+  }
+  
+  /* Barra de desplazamiento muy pequeña en móviles pequeños */
+  .producto-form-wrapper::-webkit-scrollbar {
+    width: 6px;
   }
   
   .formulario-producto-title {

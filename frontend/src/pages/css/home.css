@@ -41,10 +41,11 @@ body, html {
 /* ===== PANEL LATERAL ESTILO PvZ ===== */
 .side-panel {
   position: fixed;
-  left: 0;
-  top: 0;
   height: 100%;
-  width: 280px;
+  width: 15em;
+  /* left: 0;
+  top: 0;
+  ; */
   background: #ffcc00;
   border-right: 5px solid #ff9900;
   z-index: 40;
@@ -55,14 +56,14 @@ body, html {
 
 .side-panel.hidden {
   transform: translateX(-100%);
-  width: 0;
+  /* width: 0; */
 }
 
 .panel-content {
-  padding: 20px;
+  /* padding: 20px; */
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23ffcc00"/><path d="M0,50 Q25,40 50,50 T100,50 L100,100 L0,100 Z" fill="%23ff9900" opacity="0.3"/></svg>');
   background-size: cover;
-  min-height: 100%;
+  /* min-height: 100%; */
 }
 
 .panel-title {
@@ -84,7 +85,7 @@ body, html {
 
 /* Botones del panel estilo PvZ */
 .panel-button {
-  width: 100%;
+  /* width: 100%; */
   text-align: left;
   padding: 15px;
   background: linear-gradient(to bottom, #ffcc00, #ffaa00);
@@ -94,7 +95,7 @@ body, html {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 15px;
+  /* gap: 15px; */
   transition: all 0.2s ease;
   text-decoration: none;
   font-family: inherit;

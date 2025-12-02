@@ -42,12 +42,42 @@ export default function FormularioProducto() {
     }
   };
 
+  // 🔹 Validaciones del formulario
+  const validarFormulario = () => {
+    const { precio, precioCompra, stock, fechaCompra, fechaCaducidad } = producto;
+
+    // Validar que el precio de compra no sea mayor al precio de venta
+    if (parseFloat(precioCompra) > parseFloat(precio)) {
+      Swal.fire("Error de validación", "El precio de compra no puede ser mayor al precio de venta", "warning");
+      return false;
+    }
+
+    // Validar que el stock sea mayor a 0
+    if (parseInt(stock) <= 0) {
+      Swal.fire("Error de validación", "El stock debe ser mayor a 0", "warning");
+      return false;
+    }
+
+    // Validar que la fecha de caducidad no sea menor a la fecha de compra
+    if (new Date(fechaCaducidad) < new Date(fechaCompra)) {
+      Swal.fire("Error de validación", "La fecha de caducidad no puede ser anterior a la fecha de compra", "warning");
+      return false;
+    }
+
+    return true;
+  };
+
   // 🔹 Guardar producto
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!producto.imagen) {
       Swal.fire("Error", "Debes seleccionar una imagen", "warning");
+      return;
+    }
+
+    // Ejecutar validaciones
+    if (!validarFormulario()) {
       return;
     }
 
@@ -91,11 +121,6 @@ export default function FormularioProducto() {
 
   return (
     <div className="formulario-producto-container">
-      <div className="formulario-producto-header">
-        <h1 className="formulario-producto-title">➕ Crear Nuevo Producto</h1>
-        <p className="formulario-producto-subtitle">Completa la información del producto</p>
-      </div>
-
       <div className="producto-form-wrapper">
         <form onSubmit={handleSubmit} className="producto-form">
           <div className="form-grid">
@@ -136,6 +161,7 @@ export default function FormularioProducto() {
                 required
                 placeholder="Ej: 1200"
                 step="0.01"
+                min="0.01"
               />
             </div>
 
@@ -150,6 +176,7 @@ export default function FormularioProducto() {
                 required
                 placeholder="Ej: 900"
                 step="0.01"
+                min="0.01"
               />
             </div>
 
@@ -163,6 +190,7 @@ export default function FormularioProducto() {
                 className="form-input"
                 required
                 placeholder="Ej: 50"
+                min="1"
               />
             </div>
 

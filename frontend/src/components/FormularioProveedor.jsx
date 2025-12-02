@@ -83,10 +83,6 @@ export default function FormularioProveedor() {
 
   return (
     <div className="formulario-proveedor-container">
-      <div className="formulario-proveedor-header">
-        <h1 className="formulario-proveedor-title">🏢 Crear Nuevo Proveedor</h1>
-        <p className="formulario-proveedor-subtitle">Completa la información del proveedor</p>
-      </div>
 
       <div className="proveedor-form-wrapper">
         <form onSubmit={handleSubmit} className="proveedor-form">
