@@ -12,6 +12,14 @@ export default function CardProducto() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
+  // Función para truncar descripción a las primeras 5 palabras
+  const truncateDescription = (description) => {
+    if (!description) return "Sin descripción";
+    const words = description.trim().split(/\s+/);
+    if (words.length <= 5) return description;
+    return words.slice(0, 5).join(' ') + '...';
+  };
+
   useEffect(() => {
     // Obtener el rol del usuario del localStorage
     const storedUserRole = localStorage.getItem("userRole");
@@ -181,14 +189,14 @@ export default function CardProducto() {
 
               <div className="simple-card-content">
 
-                {/* NOMBRE + PRECIO + DESCRIPCIÓN */}
+                {/* NOMBRE + PRECIO */}
                 <div className="top-info">
-                  <div>
-                    <h3 className="product-name">{producto.nombre}</h3>
-                    <p className="product-description">{producto.descripcion || "Sin descripción"}</p>
-                  </div>
+                  <h3 className="product-name">{producto.nombre}</h3>
                   <div className="price-tag">${Number(producto.precio).toFixed(2)}</div>
                 </div>
+
+                {/* DESCRIPCIÓN - ANCHO COMPLETO */}
+                <p className="product-description">{truncateDescription(producto.descripcion)}</p>
 
                 {/* STOCK Y FECHAS */}
                 <div className="middle-info">
