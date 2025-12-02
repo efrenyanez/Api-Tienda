@@ -1,57 +1,179 @@
 .login-page {
-    text-align: center;
-    height: 100vh;
-    position: relative;
+  text-align: center;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #7ec0ee 0%, #5aa8d6 100%);
+  padding: 20px 16px 100px; /* bottom padding to keep form above grass */
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+  overflow: auto;
+  gap: 18px;
+}
+
+.login-page::before {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      #7cb07c,
+      #7cb07c 20px,
+      #8bc34a 20px,
+      #8bc34a 40px
+    );
+  z-index: 1;
+  border-top: 3px solid #5a8c5a;
+  pointer-events: none;
+}
+
+.login-page h1 {
+  position: relative;
+  margin: 0;
+  font-size: 32px;
+  color: #006600;
+  text-shadow: 3px 3px 0 #ffcc00;
+  z-index: 5;
+  animation: titlePulse 2s infinite ease-in-out;
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 /*Estilos del formulario*/
 .form{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;               
-    max-width: 400px;           /* mantiene el tamaño que tenías */ 
-    padding: 2rem;
-    border: 2px solid black;
-    background: white;          /* evita que el fondo se vea transparente */
-    border-radius: 6px;         
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  border: 5px solid #ff9900;
+  background: linear-gradient(135deg, #ffcc00, #ffdd99);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0 auto;
 }
+
 .form input {
-  width: 100%;               /* que ocupen todo el ancho disponible */
-  padding: 0.5em;            /* espacio interno */
-  margin-bottom: 0.8em;      /* separación entre inputs */
-  border: 1px solid;    /* línea suave */
-  border-radius: 4px;        /* esquinas redondeadas */
-  font-size: 1em;
-  background-color: #f3f6ff; /* color suave */
+  width: 100%;
+  padding: 0.9em;
+  margin-bottom: 1.2em;
+  border: 3px solid #ff9900;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  font-family: 'Comic Sans MS', sans-serif;
+  font-weight: bold;
+  color: #006600;
 }
+
+.form input::placeholder {
+  color: #999;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #5a8c5a;
+  background-color: #ffffcc;
+  box-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+}
+
 .form button {
   width: 100%;
-  padding: 0.6em;
-  background-color: #4a6cf7;
+  padding: 1em;
+  background: linear-gradient(to bottom, #7cb07c, #5a8c5a);
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: 3px solid #5a8c5a;
+  border-radius: 15px;
   cursor: pointer;
-  font-size: 1em;
-  margin-top: 0.5em;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0.8em;
+  transition: all 0.2s ease;
+  text-shadow: 1px 1px 0 #000;
+  font-family: 'Comic Sans MS', sans-serif;
+  box-shadow: 0 4px 0 #4a7c4a;
 }
 
 .form button:hover {
-  background-color: #3a58d4;
+  background: linear-gradient(to bottom, #8bc34a, #6b9c6b);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #4a7c4a;
 }
+
+.form button:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #4a7c4a;
+}
+
 /*Boton para crear cuenta*/
 .form a {
   display: block;
-  margin-top: 0.6em;
+  margin-top: 1.2em;
   text-align: center;
-  font-size: 0.9em;
-  color: #5a28c8;
+  font-size: 1em;
+  color: #006600;
   text-decoration: none;
-  
+  transition: all 0.2s;
+  font-weight: bold;
+  text-shadow: 0.5px 0.5px 0 #ffcc00;
 }
 
 .form a:hover {
   text-decoration: underline;
+  color: #004d00;
+}
+
+.form p {
+  color: #d32f2f;
+  font-size: 0.95em;
+  margin-top: 1em;
+  font-weight: bold;
+  text-shadow: 0.5px 0.5px 0 #fff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .login-page h1 { font-size: 30px; }
+  .form { max-width: 420px; padding: 1.8rem; }
+}
+
+@media (max-width: 768px) {
+  .login-page h1 { font-size: 26px; }
+  .form { max-width: 420px; padding: 1.6rem; }
+
+  .form input {
+    padding: 0.85em;
+    margin-bottom: 1em;
+    font-size: 15px;
+  }
+
+  .form button {
+    padding: 0.95em;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page h1 { font-size: 22px; }
+  .form { padding: 1.2rem; border-width: 3px; }
+  .form input { padding: 0.7em; margin-bottom: 0.8em; font-size: 15px; border-width: 2px; }
+  .form button { padding: 0.8em; font-size: 14px; border-width: 2px; }
+  .form a { font-size: 0.9em; }
+  .form p { font-size: 0.85em; }
+  /* Reduce grass height on very small screens so form fits */
+  .login-page::before { height: 60px; }
 }
