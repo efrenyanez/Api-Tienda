@@ -10,6 +10,15 @@ export default function CardProducto() {
   const [proveedores, setProveedores] = useState([]);
   const [selectedProducto, setSelectedProducto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    // Obtener el rol del usuario del localStorage
+    const storedUserRole = localStorage.getItem("userRole");
+    if (storedUserRole) {
+      setUserRole(storedUserRole);
+    }
+  }, []);
 
   const cargarProductos = async () => {
     try {
@@ -218,6 +227,7 @@ export default function CardProducto() {
         onClose={handleCloseModal}
         onEdit={editarProducto}
         onDelete={eliminarProducto}
+        userRole={userRole}
       />
     </div>
   );

@@ -2,8 +2,12 @@ import React from "react";
 import Swal from "sweetalert2";
 import "./css/productDetails.css";
 
-const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete }) => {
+const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete, userRole }) => {
   if (!isOpen || !producto) return null;
+
+  // Determinar si el usuario tiene permisos para editar/eliminar
+  const canEditDelete = userRole === 'admin' || userRole === 'gerente';
+  const isCajero = userRole === 'cajero';
 
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toLocaleDateString('es-ES') : 'No especificada';
@@ -12,14 +16,6 @@ const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete }) => {
   const formatCurrency = (amount) => {
     return amount ? `$${Number(amount).toFixed(2)}` : '$0.00';
   };
-
-  const calculateProfit = () => {
-    const profit = producto.precio - producto.precioCompra;
-    const profitPercentage = ((profit / producto.precioCompra) * 100).toFixed(1);
-    return { profit, profitPercentage };
-  };
-
-  const { profit, profitPercentage } = calculateProfit();
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -65,12 +61,23 @@ const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete }) => {
         <div className="modal-header">
           <h2 className="modal-title">📦 Detalles del Producto</h2>
           <div className="modal-actions">
-            <button className="action-btn edit-btn" onClick={handleEdit}>
-              ✏️ Editar
-            </button>
-            <button className="action-btn delete-btn" onClick={handleDelete}>
-              🗑️ Eliminar
-            </button>
+            {/* Los botones de Editar y Eliminar solo se muestran para Admin y Gerente */}
+            {canEditDelete && (
+              <>
+                <button className="action-btn edit-btn" onClick={handleEdit}>
+                  ✏️ Editar
+                </button>
+                <button className="action-btn delete-btn" onClick={handleDelete}>
+                  🗑️ Eliminar
+                </button>
+              </>
+            )}
+            {/* Para Cajero, mostrar un mensaje informativo */}
+            {isCajero && (
+              <span className="cajero-badge" title="Como cajero solo puedes ver los detalles">
+                👁️ Solo lectura
+              </span>
+            )}
             <button className="modal-close-btn" onClick={onClose}>
               ✕
             </button>

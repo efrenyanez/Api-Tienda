@@ -52,6 +52,20 @@
   gap: 12px;
 }
 
+.cajero-badge {
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: 2px solid #cccccc;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}
+
 .action-btn {
   padding: 8px 16px;
   border: 2px solid #000000;
