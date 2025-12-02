@@ -161,14 +161,14 @@ export const AuthProvider = ({ children }) => {
     const iat = decoded.iat * 1000;
     const timeUntilExpiry = exp - now;
     
-    /* console.log('🔍 DEBUG Token Info:', {
+    console.log('🔍 DEBUG Token Info:', {
       usuario: decoded.correo,
       rol: decoded.rol,
       emitido: new Date(iat).toLocaleString(),
       expira: new Date(exp).toLocaleString(),
       tiempoRestante: Math.round(timeUntilExpiry / 1000) + ' segundos',
       expirado: timeUntilExpiry <= 0
-    }); */
+    });
     
     return {
       decoded,
