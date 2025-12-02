@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+require('dotenv').config(); // Cargar variables de entorno
 const db = require("./database/database.js");
 const ProductoRutas = require("./routes/productos.routes.js");
 const ProveedorRutas = require("./routes/provedor.routes.js");
 const RegisterRutas = require("./routes/register.routes.js");
 const LoginRutas= require("./routes/login.routes.js");
+const AuthRutas = require("./routes/auth.routes.js");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
@@ -45,6 +47,7 @@ app.use("/api/v1/productos", ProductoRutas);
 app.use("/api/v1/proveedores", ProveedorRutas);
 app.use("/api/v1/register", RegisterRutas);
 app.use("/api/v1/login", LoginRutas);
+app.use("/api/v1/auth", AuthRutas);
 // Documentación interactiva (Scalar)
 app.use(
   "/doc",

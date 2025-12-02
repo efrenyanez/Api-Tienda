@@ -2,34 +2,81 @@
 
 const API_URL = "http://localhost:3000/api/v1";
 
+// Función para obtener el token JWT
+const getAuthToken = () => {
+  return localStorage.getItem('token');
+};
+
+// Función para crear headers con autenticación
+const getAuthHeaders = (includeContentType = true) => {
+  const token = getAuthToken();
+  const headers = {};
+  
+  if (includeContentType) {
+    headers['Content-Type'] = 'application/json';
+  }
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  return headers;
+};
+
+// Interceptor para manejar errores de autenticación
+const handleAuthError = (response) => {
+  if (response.status === 401) {
+    // Token inválido o expirado
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = '/';
+  }
+  return response;
+};
+
 const api = {
   // ================= PROVEEDORES =================
+  // Crear proveedor (solo admin y gerente)
   guardarProveedor: async (proveedor) => {
-  try {
-    const res = await fetch(`${API_URL}/proveedores/guardarProveedor`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(proveedor),
-    });
-
-    if (!res.ok) {
-      if (res.status === 409) {
-        throw new Error("El proveedor ya existe");
-      } else {
-        throw new Error("Error al guardar proveedor");
-      }
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("❌ Error en guardarProveedor:", error);
-    throw error;
-  }
-},
-  obtenerProveedores: async () => {
     try {
-      const res = await fetch(`${API_URL}/proveedores/obtenertodos`);
+      const res = await fetch(`${API_URL}/proveedores/guardarProveedor`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(proveedor),
+      });
+
+      handleAuthError(res);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 409) {
+          throw new Error("El proveedor ya existe");
+        } else if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para crear proveedores");
+        } else {
+          throw new Error(errorData.msg || "Error al guardar proveedor");
+        }
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en guardarProveedor:", error);
+      throw error;
+    }
+  },
+
+  // Obtener proveedores (público)
+  obtenerProveedores: async (useAuth = false) => {
+    try {
+      const endpoint = useAuth ? '/auth/obtenertodos' : '/obtenertodos';
+      const headers = useAuth ? getAuthHeaders(false) : {};
+      
+      const res = await fetch(`${API_URL}/proveedores${endpoint}`, { headers });
+      
+      if (useAuth) handleAuthError(res);
       if (!res.ok) throw new Error("Error al obtener proveedores");
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en obtenerProveedores:", error);
@@ -37,10 +84,17 @@ const api = {
     }
   },
 
-  obtenerProveedorPorId: async (id) => {
+  // Obtener proveedor por ID (público)
+  obtenerProveedorPorId: async (id, useAuth = false) => {
     try {
-      const res = await fetch(`${API_URL}/proveedores/por/${id}`);
+      const endpoint = useAuth ? `/auth/por/${id}` : `/por/${id}`;
+      const headers = useAuth ? getAuthHeaders(false) : {};
+      
+      const res = await fetch(`${API_URL}/proveedores${endpoint}`, { headers });
+      
+      if (useAuth) handleAuthError(res);
       if (!res.ok) throw new Error("Error al obtener proveedor por ID");
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en obtenerProveedorPorId:", error);
@@ -48,14 +102,25 @@ const api = {
     }
   },
 
+  // Actualizar proveedor (solo admin y gerente)
   actualizarProveedor: async (id, datos) => {
     try {
       const res = await fetch(`${API_URL}/proveedores/actualizar/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(datos),
       });
-      if (!res.ok) throw new Error("Error al actualizar proveedor");
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para actualizar proveedores");
+        }
+        throw new Error(errorData.msg || "Error al actualizar proveedor");
+      }
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en actualizarProveedor:", error);
@@ -63,12 +128,24 @@ const api = {
     }
   },
 
+  // Eliminar proveedor (solo admin y gerente)
   eliminarProveedor: async (id) => {
     try {
       const res = await fetch(`${API_URL}/proveedores/eliminar/${id}`, {
         method: "DELETE",
+        headers: getAuthHeaders(false),
       });
-      if (!res.ok) throw new Error("Error al eliminar proveedor");
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para eliminar proveedores");
+        }
+        throw new Error(errorData.msg || "Error al eliminar proveedor");
+      }
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en eliminarProveedor:", error);
@@ -77,13 +154,28 @@ const api = {
   },
 
   // ================= PRODUCTOS =================
+  // Crear producto (solo admin y gerente)
   guardarProducto: async (formData) => {
     try {
+      const token = getAuthToken();
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      
       const res = await fetch(`${API_URL}/productos/guardarProducto`, {
         method: "POST",
+        headers,
         body: formData, // Contiene imagen y demás datos
       });
-      if (!res.ok) throw new Error("Error al guardar producto");
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para crear productos");
+        }
+        throw new Error(errorData.msg || "Error al guardar producto");
+      }
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en guardarProducto:", error);
@@ -91,10 +183,17 @@ const api = {
     }
   },
 
-  obtenerProductos: async () => {
+  // Obtener productos (público)
+  obtenerProductos: async (useAuth = false) => {
     try {
-      const res = await fetch(`${API_URL}/productos/todosProductos`);
+      const endpoint = useAuth ? '/auth/todosProductos' : '/todosProductos';
+      const headers = useAuth ? getAuthHeaders(false) : {};
+      
+      const res = await fetch(`${API_URL}/productos${endpoint}`, { headers });
+      
+      if (useAuth) handleAuthError(res);
       if (!res.ok) throw new Error("Error al obtener productos");
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en obtenerProductos:", error);
@@ -102,10 +201,17 @@ const api = {
     }
   },
 
-  obtenerProductoPorId: async (id) => {
+  // Obtener producto por ID (público)
+  obtenerProductoPorId: async (id, useAuth = false) => {
     try {
-      const res = await fetch(`${API_URL}/productos/porId/${id}`);
+      const endpoint = useAuth ? `/auth/porId/${id}` : `/porId/${id}`;
+      const headers = useAuth ? getAuthHeaders(false) : {};
+      
+      const res = await fetch(`${API_URL}/productos${endpoint}`, { headers });
+      
+      if (useAuth) handleAuthError(res);
       if (!res.ok) throw new Error("Error al obtener producto por ID");
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en obtenerProductoPorId:", error);
@@ -113,13 +219,28 @@ const api = {
     }
   },
 
+  // Actualizar producto (solo admin y gerente)
   actualizarProducto: async (id, formData) => {
     try {
+      const token = getAuthToken();
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      
       const res = await fetch(`${API_URL}/productos/actualizar/${id}`, {
         method: "PATCH",
+        headers,
         body: formData,
       });
-      if (!res.ok) throw new Error("Error al actualizar producto");
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para actualizar productos");
+        }
+        throw new Error(errorData.msg || "Error al actualizar producto");
+      }
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en actualizarProducto:", error);
@@ -127,12 +248,24 @@ const api = {
     }
   },
 
+  // Eliminar producto (solo admin y gerente)
   eliminarProducto: async (id) => {
     try {
       const res = await fetch(`${API_URL}/productos/eliminar/${id}`, {
         method: "DELETE",
+        headers: getAuthHeaders(false),
       });
-      if (!res.ok) throw new Error("Error al eliminar producto");
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 403) {
+          throw new Error(errorData.msg || "No tienes permisos para eliminar productos");
+        }
+        throw new Error(errorData.msg || "Error al eliminar producto");
+      }
+      
       return await res.json();
     } catch (error) {
       console.error("❌ Error en eliminarProducto:", error);

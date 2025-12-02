@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import './css/login.css'
-import { loginRequest, isUserAdmin } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage({ setIsAuthenticated, setUserRole }) {
 
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         if (!email || !password) {
@@ -28,31 +30,32 @@ export default function LoginPage({ setIsAuthenticated, setUserRole }) {
         }
 
         setError("");
+        setLoading(true);
 
         try {
-            const data = await loginRequest(email, password);
-            console.log("Login correcto:", data);
-
-            // Guardar el rol del usuario globalmente
-            const userRole = data.usuario?.rol;
-            console.log("Rol del usuario:", userRole);
-
-            // Guardar en localStorage
-            localStorage.setItem("userRole", userRole);
-            localStorage.setItem("isAuthenticated", "true");
-
-            setIsAuthenticated(true);
+            const result = await login(email, password);
             
-            // Guardar el rol del usuario si se proporciona la función
-            if (setUserRole) {
-                setUserRole(userRole);
+            if (result.success) {
+                console.log("Login exitoso con JWT:", result.data);
+                
+                // Mantener compatibilidad con el sistema anterior
+                if (setIsAuthenticated) {
+                    setIsAuthenticated(true);
+                }
+                if (setUserRole && result.data.usuario?.rol) {
+                    setUserRole(result.data.usuario.rol);
+                }
+                
+                // Redirigir a /principal
+                navigate("/principal");
+            } else {
+                setError(result.message);
             }
 
-            // Siempre redirigir a /principal, pero con diferente rol
-            navigate("/principal");
-
         } catch (err) {
-            setError(err.message);
+            setError(err.message || "Error de conexión");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -78,7 +81,9 @@ export default function LoginPage({ setIsAuthenticated, setUserRole }) {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <button className="btn" onClick={handleSubmit}>Iniciar sesión</button>
+                <button className="btn" onClick={handleSubmit} disabled={loading}>
+                    {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+                </button>
 
                 <a className="link" href="/register">Crear cuenta</a>
 

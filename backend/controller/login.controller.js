@@ -1,5 +1,6 @@
 const Usuario = require("../model/usuario.model");
 const bcrypt = require("bcrypt");
+const { generateToken } = require("../utils/jwt.utils");
 
 module.exports.login = async (req, res) => {
     try {
@@ -18,8 +19,18 @@ module.exports.login = async (req, res) => {
             });
         }
 
+        // Generar token JWT
+        const tokenPayload = {
+            id: usuario._id,
+            correo: usuario.correo,
+            rol: usuario.rol
+        };
+        
+        const token = generateToken(tokenPayload);
+
         res.json({
             msg: "Login exitoso",
+            token,
             usuario: {
                 id: usuario._id,
                 correo: usuario.correo,
@@ -28,6 +39,7 @@ module.exports.login = async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Error en login:', error);
         res.status(500).json({ msg: "Error en login", error: error.message });
     }
 };
