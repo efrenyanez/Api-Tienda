@@ -13,6 +13,7 @@ const multer = require("multer");
 
 // Scalar Docs
 const { apiReference } = require("@scalar/express-api-reference");
+const usuariosRoutes = require("./routes/usuarios.routes");
 
 const app = express();
 const PORT = 3000;
@@ -48,6 +49,8 @@ app.use("/api/v1/proveedores", ProveedorRutas);
 app.use("/api/v1/register", RegisterRutas);
 app.use("/api/v1/login", LoginRutas);
 app.use("/api/v1/auth", AuthRutas);
+// Rutas de usuarios
+app.use("/api/v1", usuariosRoutes);
 // Documentación interactiva (Scalar)
 app.use(
   "/doc",

@@ -12,17 +12,23 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  table-layout: fixed; /* Asegura que las columnas tengan un ancho fijo */
 }
 
 table th, table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+  white-space: nowrap; /* Evita que el texto se corte en varias líneas */
+  overflow: hidden; /* Oculta el texto que exceda el ancho */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos al texto largo */
+  color: #000; /* Cambiar el color del texto a negro para asegurar visibilidad */
 }
 
 table th {
-  background-color: #f4f4f4;
+  background-color: #e0e0e0; /* Fondo claro para el encabezado */
   color: #333;
+  font-weight: bold;
 }
 
 table tr:nth-child(even) {
@@ -50,4 +56,8 @@ select {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+table td {
+  background-color: #fff; /* Fondo blanco para las celdas */
 }

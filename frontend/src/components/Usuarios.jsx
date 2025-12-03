@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import "../css/usuarios.css"; // Opcional: Agregar estilos personalizados para la tabla
-import Layout from "../components/Layout";
-import FormularioProveedor from "../components/FormularioProveedor";
 
 export default function TablaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -13,8 +11,8 @@ export default function TablaUsuarios() {
     const fetchUsuarios = async () => {
       try {
         const data = await api.obtenerUsuarios();
-        setUsuarios(data);
-      } catch (err) {
+        setUsuarios(Array.isArray(data.usuarios) ? data.usuarios : []); // Asegurar que sea un arreglo
+      } catch {
         setError("Error al cargar usuarios");
       } finally {
         setLoading(false);
@@ -28,8 +26,8 @@ export default function TablaUsuarios() {
     if (window.confirm("¿Estás seguro de eliminar este usuario?")) {
       try {
         await api.eliminarUsuario(id);
-        setUsuarios(usuarios.filter((user) => user.id !== id));
-      } catch (err) {
+        setUsuarios(usuarios.filter((user) => user._id !== id));
+      } catch {
         alert("Error al eliminar usuario");
       }
     }
@@ -40,10 +38,10 @@ export default function TablaUsuarios() {
       await api.asignarRol(id, newRole);
       setUsuarios(
         usuarios.map((user) =>
-          user.id === id ? { ...user, role: newRole } : user
+          user._id === id ? { ...user, rol: newRole } : user
         )
       );
-    } catch (err) {
+    } catch {
       alert("Error al asignar rol");
     }
   };
@@ -52,41 +50,36 @@ export default function TablaUsuarios() {
   if (error) return <p>{error}</p>;
 
   return (
-    <Layout>
+    <div>
       <h1>Gestión de Usuarios</h1>
-      <FormularioProveedor />
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
+            <th>Correo</th>
             <th>Rol</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {usuarios.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
+            <tr key={user._id}>
+              <td>{user.correo}</td>
               <td>
                 <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                  value={user.rol}
+                  onChange={(e) => handleRoleChange(user._id, e.target.value)}
                 >
                   <option value="user">Usuario</option>
                   <option value="admin">Administrador</option>
                 </select>
               </td>
               <td>
-                <button onClick={() => handleDelete(user.id)}>Eliminar</button>
+                <button onClick={() => handleDelete(user._id)}>Eliminar</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </Layout>
+    </div>
   );
 }
