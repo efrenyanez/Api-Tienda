@@ -30,28 +30,10 @@ const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete, userRole 
     }
   };
 
-  const handleDelete = async () => {
-    const confirmacion = await Swal.fire({
-      title: "¿Eliminar producto?",
-      text: `¿Estás seguro de que quieres eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#000000",
-      cancelButtonColor: "#666666",
-      background: "#ffffff",
-      color: "#000000",
-      customClass: {
-        popup: 'swal-monochrome-popup'
-      }
-    });
-
-    if (confirmacion.isConfirmed) {
-      onClose(); // Cerrar el modal de detalles
-      if (onDelete) {
-        onDelete(producto._id); // Llamar la función de eliminación del componente padre
-      }
+  const handleDelete = () => {
+    onClose(); // Cerrar el modal de detalles
+    if (onDelete) {
+      onDelete(producto._id); // Llamar la función de eliminación del componente padre
     }
   };
 
@@ -122,49 +104,41 @@ const ProductDetails = ({ producto, onClose, isOpen, onEdit, onDelete, userRole 
             )}
 
             <div className="product-details-grid">
-              <div className="detail-item">
-                <label>Stock Disponible</label>
-                <div className="stock-info">
-                  <span className={`stock-badge ${Number(producto.stock) > 0 ? 'in-stock' : 'out-stock'}`}>
-                    {Number(producto.stock) > 0 ? '✅ En Stock' : '❌ Agotado'}
+              <div className="detail-row">
+                <div className="detail-item">
+                  <label>Stock Disponible</label>
+                  <div className="stock-info">
+                    <span className={`stock-badge ${Number(producto.stock) > 0 ? 'in-stock' : 'out-stock'}`}>
+                      {Number(producto.stock) > 0 ? '✅ En Stock' : '❌ Agotado'}
+                    </span>
+                    <span className="stock-quantity">{producto.stock} unidades</span>
+                  </div>
+                </div>
+
+                <div className="detail-item">
+                  <label>Estado del Producto</label>
+                  <span className={`status-badge ${new Date(producto.fechaCaducidad) > new Date() ? 'valid' : 'expired'}`}>
+                    {new Date(producto.fechaCaducidad) > new Date() ? '✅ Vigente' : '⚠️ Caducado'}
                   </span>
-                  <span className="stock-quantity">{producto.stock} unidades</span>
                 </div>
               </div>
 
-              <div className="detail-item">
+              <div className="detail-row">
+                <div className="detail-item">
+                  <label>Fecha de Compra</label>
+                  <span>{formatDate(producto.fechaCompra)}</span>
+                </div>
+
+                <div className="detail-item">
+                  <label>Fecha de Caducidad</label>
+                  <span>{formatDate(producto.fechaCaducidad)}</span>
+                </div>
+              </div>
+
+              <div className="detail-item full-width">
                 <label>Proveedor</label>
                 <span className="provider-name">
                   {producto.provedor ? producto.provedor.nombre : 'No asignado'}
-                </span>
-              </div>
-
-              {/* <div className="detail-item">
-                <label>Ganancia por Unidad</label>
-                <div className="profit-info">
-                  <span className={`profit-amount ${profit >= 0 ? 'positive' : 'negative'}`}>
-                    {formatCurrency(profit)}
-                  </span>
-                  <span className={`profit-percentage ${profit >= 0 ? 'positive' : 'negative'}`}>
-                    ({profit >= 0 ? '+' : ''}{profitPercentage}%)
-                  </span>
-                </div>
-              </div> */}
-
-              <div className="detail-item">
-                <label>Fecha de Compra</label>
-                <span>{formatDate(producto.fechaCompra)}</span>
-              </div>
-
-              <div className="detail-item">
-                <label>Fecha de Caducidad</label>
-                <span>{formatDate(producto.fechaCaducidad)}</span>
-              </div>
-
-              <div className="detail-item">
-                <label>Estado del Producto</label>
-                <span className={`status-badge ${new Date(producto.fechaCaducidad) > new Date() ? 'valid' : 'expired'}`}>
-                  {new Date(producto.fechaCaducidad) > new Date() ? '✅ Vigente' : '⚠️ Caducado'}
                 </span>
               </div>
             </div>

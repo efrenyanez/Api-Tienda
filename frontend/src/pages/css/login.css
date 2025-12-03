@@ -34,13 +34,14 @@
 }
 
 .login-page h1 {
-  position: relative;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
-  font-size: 32px;
-  color: #006600;
-  text-shadow: 3px 3px 0 #ffcc00;
+  font-size: 2rem;
+  color: #333;
   z-index: 5;
-  animation: titlePulse 2s infinite ease-in-out;
 }
 
 @keyframes titlePulse {
@@ -92,8 +93,8 @@
 }
 
 .form button {
-  width: 100%;
-  padding: 1em;
+  width: auto;
+  padding: 1em 2em;
   background: linear-gradient(to bottom, #7cb07c, #5a8c5a);
   color: white;
   border: 3px solid #5a8c5a;
@@ -101,11 +102,12 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
-  margin-top: 0.8em;
+  margin: 0.8em auto 0;
   transition: all 0.2s ease;
   text-shadow: 1px 1px 0 #000;
   font-family: 'Comic Sans MS', sans-serif;
   box-shadow: 0 4px 0 #4a7c4a;
+  display: block;
 }
 
 .form button:hover {

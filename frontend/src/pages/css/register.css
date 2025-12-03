@@ -6,18 +6,20 @@
 
 .register-page h1 {
     position: absolute;
-    top: 15%;
+    top: 8%;
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
     font-size: 2rem;
     color: #333;
+    z-index: 10;
+    font-weight: bold;
 }
 
 /*Estilos del formulario*/
 .form {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;               

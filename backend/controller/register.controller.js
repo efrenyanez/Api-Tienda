@@ -6,7 +6,12 @@ const bcrypt = require("bcrypt");
    ========================================================= */
 const register = async (req, res) => {
     try {
-        const { correo, contraseña } = req.body;
+        const { nombre, correo, contraseña } = req.body;
+
+        // Validar que todos los campos requeridos estén presentes
+        if (!nombre || !correo || !contraseña) {
+            return res.status(400).json({ msg: "Nombre, correo y contraseña son requeridos" });
+        }
 
         const existe = await Usuario.findOne({ correo });
         if (existe) return res.status(400).json({ msg: "El correo ya está registrado" });
@@ -14,6 +19,7 @@ const register = async (req, res) => {
         const hashed = await bcrypt.hash(contraseña, 10);
 
         const nuevo = new Usuario({
+            nombre,
             correo,
             contraseña: hashed,
             rol: "pendiente" 
@@ -23,7 +29,7 @@ const register = async (req, res) => {
 
         res.json({
             msg: "Usuario registrado correctamente. Espera a que el administrador te asigne un rol.",
-            usuario: { correo: nuevo.correo }
+            usuario: { nombre: nuevo.nombre, correo: nuevo.correo }
         });
 
     } catch (error) {

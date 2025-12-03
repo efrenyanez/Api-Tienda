@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
     const navigate = useNavigate();
     
+    const [nombre, setNombre] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -14,8 +15,13 @@ export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
 
     const handleSubmit = async () => {
         // Validaciones
-        if (!email || !password || !confirmPassword) {
+        if (!nombre || !email || !password || !confirmPassword) {
             setError("Llena todos los campos.");
+            return;
+        }
+
+        if (nombre.trim().length < 2) {
+            setError("El nombre debe tener al menos 2 caracteres.");
             return;
         }
 
@@ -38,7 +44,7 @@ export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
         setLoading(true);
 
         try {
-            const data = await registerRequest(email, password);
+            const data = await registerRequest(nombre, email, password);
             console.log("Registro correcto:", data);
 
             // Mostrar mensaje de éxito del backend
@@ -59,6 +65,14 @@ export default function RegisterPage({ setIsAuthenticated, setIsAdmin }) {
             <h1>Regístrate</h1>
 
             <div className="form">
+                <input
+                    className="input"
+                    type="text"
+                    placeholder="Nombre completo"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                />
+
                 <input
                     className="input"
                     type="email"

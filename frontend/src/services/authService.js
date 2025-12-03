@@ -118,7 +118,7 @@ export async function logoutRequest() {
 }
 
 // Función del registro
-export async function registerRequest(email, password) {
+export async function registerRequest(nombre, email, password) {
   try {
     const response = await fetch("http://localhost:3000/api/v1/register/", {
       method: "POST",
@@ -126,6 +126,7 @@ export async function registerRequest(email, password) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ 
+        nombre: nombre,
         correo: email, 
         contraseña: password
         // El rol será asignado posteriormente por el administrador

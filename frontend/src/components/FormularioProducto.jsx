@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../api/api.js";
 import "../css/FormularioProducto.css";
 
 export default function FormularioProducto() {
+  const navigate = useNavigate();
+  
   const [producto, setProducto] = useState({
     nombre: "",
     descripcion: "",
@@ -112,6 +115,9 @@ export default function FormularioProducto() {
       
       // Limpiar input file
       document.getElementById('imagen-input').value = '';
+      
+      // Redirigir a /principal
+      navigate('/principal');
       
     } catch (error) {
       console.error("Error al guardar producto:", error);

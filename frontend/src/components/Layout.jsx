@@ -48,6 +48,15 @@ export default function Layout({ children, pageTitle, activePage }) {
               <span>Home</span>
             </a>
             
+            <a 
+              href="/buscador" 
+              className="panel-button"
+              style={getButtonStyle('search')}
+            >
+              <span>🔍</span>
+              <span>Buscador</span>
+            </a>
+            
           </nav>
 
           

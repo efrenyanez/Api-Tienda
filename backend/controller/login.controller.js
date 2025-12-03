@@ -22,6 +22,7 @@ module.exports.login = async (req, res) => {
         // Generar token JWT
         const tokenPayload = {
             id: usuario._id,
+            nombre: usuario.nombre,
             correo: usuario.correo,
             rol: usuario.rol
         };
@@ -33,6 +34,7 @@ module.exports.login = async (req, res) => {
             token,
             usuario: {
                 id: usuario._id,
+                nombre: usuario.nombre,
                 correo: usuario.correo,
                 rol: usuario.rol
             }

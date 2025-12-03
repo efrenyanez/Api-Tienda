@@ -163,10 +163,10 @@ export default function TablaUsuarios() {
           <table className="usuarios-table">
             <thead>
               <tr>
+                <th>Nombre</th>
                 <th>Correo Electrónico</th>
                 <th>Rol Actual</th>
                 <th>Fecha Registro</th>
-                <th>Última Actualización</th>
                 <th>Cambiar Rol</th>
                 <th>Acciones</th>
               </tr>
@@ -174,6 +174,7 @@ export default function TablaUsuarios() {
             <tbody>
               {usuarios.map((usuario) => (
                 <tr key={usuario._id}>
+                  <td className="user-name">{usuario.nombre || ""}</td>
                   <td className="user-email">{usuario.correo}</td>
                   <td>
                     <span className={`rol-badge ${getRolBadgeClass(usuario.rol)}`}>
@@ -182,9 +183,6 @@ export default function TablaUsuarios() {
                   </td>
                   <td className="fecha-registro">
                     {formatearFecha(usuario.createdAt)}
-                  </td>
-                  <td className="fecha-actualizacion">
-                    {formatearFecha(usuario.updatedAt)}
                   </td>
                   <td className="rol-selector">
                     <select

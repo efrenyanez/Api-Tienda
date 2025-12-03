@@ -8,6 +8,7 @@ import LoginPage from "./pages/login.page.jsx";
 import RegisterPage from "./pages/register.page.jsx";
 import ProtectedRoute from "./components/protectedRoute";
 import Usuarios from "./pages/Usuarios.jsx";
+import Buscador from "./pages/Buscador.jsx";
 //import TokenDebugger from "./components/TokenDebugger";
 
 
@@ -67,6 +68,14 @@ export default function App() {
                 <Usuarios />
               </ProtectedRoute>
             } 
+          />
+          <Route
+            path="/buscador"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Buscador />
+              </ProtectedRoute>
+            }
           />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>

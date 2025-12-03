@@ -61,7 +61,7 @@ export default function LoginPage({ setIsAuthenticated, setUserRole }) {
 
     return (
         <div className="login-page">
-            <h1>Login</h1>
+             <h1>Iniciar Sesión</h1>
 
             <div className="form">
 

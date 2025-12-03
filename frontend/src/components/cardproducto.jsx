@@ -12,12 +12,12 @@ export default function CardProducto() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
-  // Función para truncar descripción a las primeras 5 palabras
+  // Función para truncar descripción a las primeras 3 palabras
   const truncateDescription = (description) => {
     if (!description) return "Sin descripción";
     const words = description.trim().split(/\s+/);
-    if (words.length <= 5) return description;
-    return words.slice(0, 5).join(' ') + '...';
+    if (words.length <= 3) return description;
+    return words.slice(0, 3).join(' ') + '...';
   };
 
   useEffect(() => {
@@ -189,37 +189,38 @@ export default function CardProducto() {
 
               <div className="simple-card-content">
 
-                {/* NOMBRE + PRECIO */}
+                {/* FILA 1: NOMBRE + PRECIO */}
                 <div className="top-info">
                   <h3 className="product-name">{producto.nombre}</h3>
                   <div className="price-tag">${Number(producto.precio).toFixed(2)}</div>
                 </div>
 
-                {/* DESCRIPCIÓN - ANCHO COMPLETO */}
+                {/* FILA 2: DESCRIPCIÓN */}
                 <p className="product-description">{truncateDescription(producto.descripcion)}</p>
 
-                {/* STOCK Y FECHAS */}
-                <div className="middle-info">
-                  <div className="stock-simple">
+                {/* FILA 3: STOCK + ESTADO + PRECIOS */}
+                <div className="info-row">
+                  <div className="stock-info">
                     <span>Stock: {producto.stock}</span>
-                    <div className={`status-indicator ${Number(producto.stock) > 0 ? 'available' : 'unavailable'}`}></div>
+                    <div className={`status-dot ${Number(producto.stock) > 0 ? 'available' : 'unavailable'}`}></div>
                   </div>
-
-                  <div className="dates-info">
-                    <p>Fecha cad: {producto.fechaCaducidad?.split("T")[0] || "--"}</p>
-                    <p>Compra: {producto.fechaCompra?.split("T")[0] || "--"}</p>
+                  <div className="price-info">
+                    <span>Compra: ${producto.precioCompra || "0"}</span>
                   </div>
                 </div>
 
-                {/* PROVEEDOR */}
+                {/* FILA 4: FECHAS */}
+                <div className="dates-row">
+                  <span>Cad: {producto.fechaCaducidad?.split("T")[0] || "--"}</span>
+                  <span>Comp: {producto.fechaCompra?.split("T")[0] || "--"}</span>
+                </div>
+
+                {/* FILA 5: PROVEEDOR (si existe) */}
                 {producto.provedor && (
-                  <div className="provider-simple">
-                    <span>Proveedor: {producto.provedor.nombre}</span>
+                  <div className="provider-row">
+                    <span>📦 {producto.provedor.nombre}</span>
                   </div>
                 )}
-
-                {/* PRECIO DE COMPRA */}
-                <p className="compra-tag">Precio de compra: ${producto.precioCompra || "--"}</p>
 
               </div>
 
