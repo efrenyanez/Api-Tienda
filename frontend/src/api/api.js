@@ -273,6 +273,74 @@ const api = {
     }
   },
 
+  // ================= USUARIOS =================
+  // Obtener todos los usuarios (solo admin)
+  obtenerUsuarios: async () => {
+    try {
+      const res = await fetch(`${API_URL}/register/todos`, {
+        method: "GET",
+        headers: getAuthHeaders(false),
+      });
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.msg || "Error al obtener usuarios");
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en obtenerUsuarios:", error);
+      throw error;
+    }
+  },
+
+  // Actualizar usuario (cambiar rol, correo, etc.)
+  actualizarUsuario: async (id, datos) => {
+    try {
+      const res = await fetch(`${API_URL}/register/actualizar/${id}`, {
+        method: "PATCH",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(datos),
+      });
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.msg || "Error al actualizar usuario");
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en actualizarUsuario:", error);
+      throw error;
+    }
+  },
+
+  // Eliminar usuario (solo admin)
+  eliminarUsuario: async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/register/eliminar/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(false),
+      });
+      
+      handleAuthError(res);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.msg || "Error al eliminar usuario");
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("❌ Error en eliminarUsuario:", error);
+      throw error;
+    }
+  },
+
   // ================= SUBIDA DE IMAGEN =================
   subirImagen: async (formData) => {
     try {
@@ -284,52 +352,6 @@ const api = {
       return await res.json();
     } catch (error) {
       console.error("❌ Error en subirImagen:", error);
-      throw error;
-    }
-  },
-
-  // ================= USUARIOS =================
-  obtenerUsuarios: async () => {
-    try {
-      const res = await fetch(`${API_URL}/usuarios`, {
-        headers: getAuthHeaders(),
-      });
-      handleAuthError(res);
-      if (!res.ok) throw new Error("Error al obtener usuarios");
-      return await res.json();
-    } catch (error) {
-      console.error("❌ Error en obtenerUsuarios:", error);
-      throw error;
-    }
-  },
-
-  eliminarUsuario: async (id) => {
-    try {
-      const res = await fetch(`${API_URL}/usuarios/${id}`, {
-        method: "DELETE",
-        headers: getAuthHeaders(),
-      });
-      handleAuthError(res);
-      if (!res.ok) throw new Error("Error al eliminar usuario");
-      return await res.json();
-    } catch (error) {
-      console.error("❌ Error en eliminarUsuario:", error);
-      throw error;
-    }
-  },
-
-  asignarRol: async (id, role) => {
-    try {
-      const res = await fetch(`${API_URL}/usuarios/${id}/role`, {
-        method: "PATCH",
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ role }),
-      });
-      handleAuthError(res);
-      if (!res.ok) throw new Error("Error al asignar rol");
-      return await res.json();
-    } catch (error) {
-      console.error("❌ Error en asignarRol:", error);
       throw error;
     }
   },
